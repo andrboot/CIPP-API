@@ -1,7 +1,7 @@
 using namespace System.Net
-
 # Input bindings are passed in via param block.
 param($Request, $TriggerMetadata)
+Set-Location (Get-Item $PSScriptRoot).Parent.FullName
 $UserCreds = ([System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($request.headers.'x-ms-client-principal')) | ConvertFrom-Json)
 if ("admin" -notin $UserCreds.userRoles) {
       Push-OutputBinding -Name Response -Value ([HttpResponseContext]@{
@@ -173,7 +173,7 @@ try {
                   Remove-AzDataTableRow @Table -Entity $Rows
 
                   $step = 7
-                  $Results = @{"message" = "Installation completed."; step = $step
+                  $Results = @{"message" = "Installation completed. You must perform a token cache clear. For instructions click "; step = $step ; url = "https://cipp.app/docs/general/troubleshooting/#clear-token-cache"
                   }
             }
       }
